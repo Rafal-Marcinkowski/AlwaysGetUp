@@ -80,6 +80,7 @@ public class MainViewModel : BaseViewModel
                 if (stopwatch.Elapsed.TotalMinutes > 60 && Background != Color.Red)
                 {
                     Background = Color.Red;
+                    IsWorkPeriodTaskActive = false;
                     OneHourOfSittingEvent?.Invoke(this, EventArgs.Empty);
                 }
                 await Task.Delay(1000);
