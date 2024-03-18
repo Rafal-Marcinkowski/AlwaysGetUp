@@ -7,8 +7,8 @@ namespace AlwaysGetUp.ViewModels;
 
 public class MainViewModel : BaseViewModel
 {
-    private static MainViewModel _instance;
 
+    private static MainViewModel _instance;
     public static MainViewModel Instance
     {
         get
@@ -20,9 +20,11 @@ public class MainViewModel : BaseViewModel
             return _instance;
         }
     }
-    public bool IsWorkPeriodTaskActive = false;
 
     public event EventHandler? OneHourOfSittingEvent;
+
+    public bool IsWorkPeriodTaskActive = false;
+
     public string? Time { get; set; }
     private Color _background = Color.Gray;
     public Color Background
@@ -49,6 +51,7 @@ public class MainViewModel : BaseViewModel
 
     private TimeSpan totalSittingTime = TimeSpan.Zero;
     private TimeSpan totalWalkingTime = TimeSpan.Zero;
+
     public ICommand StartCommand =>
         new RelayCommand(async () =>
         {
@@ -76,6 +79,7 @@ public class MainViewModel : BaseViewModel
                 await BreakPeriod(cancellation.Token);
             }
         });
+
     private async Task WorkPeriod(CancellationToken token)
     {
         try
@@ -102,6 +106,7 @@ public class MainViewModel : BaseViewModel
             IsWorkPeriodTaskActive = false;
         }
     }
+
     private async Task BreakPeriod(CancellationToken token)
     {
         token.ThrowIfCancellationRequested();
@@ -111,13 +116,14 @@ public class MainViewModel : BaseViewModel
         {
             Time = $"{Math.Round(stopwatch.Elapsed.TotalMinutes, 1)} minutes";
             OnPropertyChanged(nameof(Time));
-            if (stopwatch.Elapsed.TotalMinutes > 3 && Background != Color.Green)
+            if (stopwatch.Elapsed.TotalMinutes > 5 && Background != Color.Green)
             {
                 Background = Color.Green;
             }
             await Task.Delay(1000);
         }
     }
+
     public void LogAccumulatedTime()
     {
         Log.Information($"Total walking time: {totalWalkingTime.TotalMinutes:F1} minutes.");
