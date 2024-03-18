@@ -38,7 +38,7 @@
                         <Setter Property="Text" Value="Sitting time: "></Setter>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Background}" Value="Red">
-                        <Setter Property="Text" Value="(GET UP!) Sitting time: "></Setter>
+                        <Setter Property="Text" Value="GET UP! Sitting time: "></Setter>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Background}" Value="Red">
                         <Setter Property="Foreground" Value="Red"></Setter>
@@ -47,7 +47,7 @@
                         <Setter Property="Text" Value="Break time: "></Setter>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Background}" Value="Green">
-                        <Setter Property="Text" Value="(Good Job!) Break time: "></Setter>
+                        <Setter Property="Text" Value="Good Job! Break time: "></Setter>
                         <Setter Property="Foreground" Value="Green"></Setter>
                     </DataTrigger>
                 </Style.Triggers>
