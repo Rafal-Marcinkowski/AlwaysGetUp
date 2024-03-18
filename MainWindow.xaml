@@ -9,28 +9,25 @@
                Height="150" Width="200">
     <UserControl>
         <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
-        <Button 
-        Content="Przerwa/Praca"
-        Style="{StaticResource buttonStyle}"
-        Command="{Binding StartCommand}"
-    />
-        <StackPanel Orientation="Horizontal"  Grid.Row="1">
-            <TextBlock
-        VerticalAlignment="Center"
-        HorizontalAlignment="Center"
-        Style="{StaticResource tBlockStyle}"
-        x:Name="TBlock"
-        />
-            <TextBlock
-        VerticalAlignment="Center"
-        HorizontalAlignment="Center"
-        Text="{Binding Time}"
-        />
-        </StackPanel>
-    </Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Button 
+                Style="{StaticResource buttonStyle}"
+                Command="{Binding StartCommand}"
+                FontWeight="DemiBold"
+             />
+            <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Center">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Style="{StaticResource tBlockStyle}"
+                    FontWeight="DemiBold"/>
+                <TextBlock
+                    VerticalAlignment="Center"
+                    Text="{Binding Time}"
+                    FontWeight="DemiBold"/>
+            </StackPanel>
+        </Grid>
     </UserControl>
 </Window>

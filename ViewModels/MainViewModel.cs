@@ -1,32 +1,29 @@
 ﻿using GalaSoft.MvvmLight.Command;
-using System;
-using System.Collections.Generic;
+using Serilog;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media.Animation;
-using System.Windows.Threading;
 
 namespace AlwaysGetUp.ViewModels;
 
 public class MainViewModel : BaseViewModel
 {
-    private bool _isWorkPeriodTaskActive = false;
-    public bool IsWorkPeriodTaskActive
+    private static MainViewModel _instance;
+
+    public static MainViewModel Instance
     {
-        get => _isWorkPeriodTaskActive;
-        set
+        get
         {
-            _isWorkPeriodTaskActive = value;
-            OnPropertyChanged(nameof(IsWorkPeriodTaskActive));
+            if (_instance == null)
+            {
+                _instance = new MainViewModel();
+            }
+            return _instance;
         }
     }
-    public event EventHandler OneHourOfSittingEvent;
-    public string Time { get; set; }
+    public bool IsWorkPeriodTaskActive = false;
+
+    public event EventHandler? OneHourOfSittingEvent;
+    public string? Time { get; set; }
     private Color _background = Color.Gray;
     public Color Background
     {
@@ -49,6 +46,9 @@ public class MainViewModel : BaseViewModel
     private CancellationTokenSource cancellation = new();
 
     private Stopwatch stopwatch = new();
+
+    private TimeSpan totalSittingTime = TimeSpan.Zero;
+    private TimeSpan totalWalkingTime = TimeSpan.Zero;
     public ICommand StartCommand =>
         new RelayCommand(async () =>
         {
@@ -57,10 +57,22 @@ public class MainViewModel : BaseViewModel
             if (stopwatch.IsRunning) { stopwatch.Stop(); }
             if (Background == Color.Gray || Background == Color.White || Background == Color.Green)
             {
+                if (stopwatch.Elapsed.TotalMinutes > 0)
+                {
+                    Log.Information($"Walking time: {Math.Round(stopwatch.Elapsed.TotalMinutes, 1):F1} minutes.");
+                    totalWalkingTime += TimeSpan.FromMinutes(Math.Round(stopwatch.Elapsed.TotalMinutes, 1));
+                }
+                Log.Information($"Sitting period started.");
                 await WorkPeriod(cancellation.Token);
             }
-            if (Background == Color.Red || Background == Color.Black)
+            else
             {
+                if (stopwatch.Elapsed.TotalMinutes > 0)
+                {
+                    Log.Information($"Sitting time: {Math.Round(stopwatch.Elapsed.TotalMinutes, 1):F1} minutes.");
+                    totalSittingTime += TimeSpan.FromMinutes(Math.Round(stopwatch.Elapsed.TotalMinutes, 1));
+                }
+                Log.Information($"Break period started.");
                 await BreakPeriod(cancellation.Token);
             }
         });
@@ -70,12 +82,11 @@ public class MainViewModel : BaseViewModel
         {
             token.ThrowIfCancellationRequested();
             stopwatch.Restart();
-            stopwatch.Start();
             Background = Color.Black;
             IsWorkPeriodTaskActive = true;
             while (!token.IsCancellationRequested)
             {
-                Time = $"{(int)stopwatch.Elapsed.TotalMinutes} minut";
+                Time = $"{Math.Round(stopwatch.Elapsed.TotalMinutes, 1)} minutes";
                 OnPropertyChanged(nameof(Time));
                 if (stopwatch.Elapsed.TotalMinutes > 60 && Background != Color.Red)
                 {
@@ -85,10 +96,6 @@ public class MainViewModel : BaseViewModel
                 }
                 await Task.Delay(1000);
             }
-        }
-        catch (OperationCanceledException)
-        {
-            IsWorkPeriodTaskActive = false;
         }
         finally
         {
@@ -100,10 +107,9 @@ public class MainViewModel : BaseViewModel
         token.ThrowIfCancellationRequested();
         Background = Color.White;
         stopwatch.Restart();
-        stopwatch.Start();
         while (!token.IsCancellationRequested)
         {
-            Time = $"{(int)stopwatch.Elapsed.TotalSeconds} sekund";
+            Time = $"{Math.Round(stopwatch.Elapsed.TotalMinutes, 1)} minutes";
             OnPropertyChanged(nameof(Time));
             if (stopwatch.Elapsed.TotalMinutes > 3 && Background != Color.Green)
             {
@@ -111,5 +117,10 @@ public class MainViewModel : BaseViewModel
             }
             await Task.Delay(1000);
         }
+    }
+    public void LogAccumulatedTime()
+    {
+        Log.Information($"Total walking time: {totalWalkingTime.TotalMinutes:F1} minutes.");
+        Log.Information($"Total sitting time: {totalSittingTime.TotalMinutes:F1} minutes.");
     }
 }

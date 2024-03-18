@@ -8,7 +8,7 @@ namespace AlwaysGetUp
     /// </summary>
     public partial class MainWindow : Window
     {
-        private MainViewModel viewModel = new();
+        private MainViewModel viewModel = MainViewModel.Instance;
         public MainWindow()
         {
             DataContext = viewModel;

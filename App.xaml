@@ -6,45 +6,50 @@
          StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <!--<materialDesign:CustomColorTheme BaseTheme="Light" PrimaryColor="Aqua" SecondaryColor="DarkGreen" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Green.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Lime.xaml" />-->
-            </ResourceDictionary.MergedDictionaries>
             <Style x:Key="buttonStyle" TargetType="Button">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Background}" Value="Gray">
                         <Setter Property="Foreground" Value="Gray"></Setter>
+                        <Setter Property="Content" Value="START"></Setter>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Background}" Value="White">
-                        <Setter Property="Foreground" Value="White"></Setter>
+                        <Setter Property="Content" Value="WORK"></Setter>
+                        <Setter Property="Foreground" Value="Black"></Setter>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Background}" Value="Black">
                         <Setter Property="Foreground" Value="Black"></Setter>
+                        <Setter Property="Content" Value="BREAK"></Setter>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Background}" Value="Green">
                         <Setter Property="Foreground" Value="Green"></Setter>
+                        <Setter Property="Content" Value="WORK"></Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Background}" Value="Red">
+                        <Setter Property="Foreground" Value="Red"></Setter>
+                        <Setter Property="Content" Value="BREAK"></Setter>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
             <Style x:Key="tBlockStyle" TargetType="TextBlock">
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding Background}" Value="Gray">
-                        <Setter Property="Text" Value="Czekam na start..."></Setter>
+                        <Setter Property="Text" Value="Waiting to start..."></Setter>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Background}" Value="Black">
-                        <Setter Property="Text" Value="Siedzisz przez: "></Setter>
+                        <Setter Property="Text" Value="Sitting time: "></Setter>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Background}" Value="Red">
-                        <Setter Property="Text" Value="Czas wstać! "></Setter>
+                        <Setter Property="Text" Value="(GET UP!) Sitting time: "></Setter>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Background}" Value="Red">
+                        <Setter Property="Foreground" Value="Red"></Setter>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Background}" Value="White">
-                        <Setter Property="Text" Value="Przerwa trwa od:  "></Setter>
+                        <Setter Property="Text" Value="Break time: "></Setter>
                     </DataTrigger>
                     <DataTrigger Binding="{Binding Background}" Value="Green">
-                        <Setter Property="Text" Value="Możesz usiąść:  "></Setter>
+                        <Setter Property="Text" Value="(Good Job!) Break time: "></Setter>
+                        <Setter Property="Foreground" Value="Green"></Setter>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
