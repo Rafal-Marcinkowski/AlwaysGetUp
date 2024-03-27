@@ -27,12 +27,12 @@ public partial class App : Application
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
-        Log.Information("Application started.");
+        Log.Information($"Application started.");
     }
 
     protected override void OnExit(ExitEventArgs e)
     {
-        Log.Information($"Application exited.{Environment.NewLine}");
+        Log.Information($"Application exited.");
         MainViewModel.Instance.LogAccumulatedTime();
         Log.CloseAndFlush();
         base.OnExit(e);

@@ -138,6 +138,6 @@ public class MainViewModel : BaseViewModel
             totalSittingTime += TimeSpan.FromMinutes(Math.Round(stopwatch.Elapsed.TotalMinutes, 1));
         }
         Log.Information($"Total walking time: {totalWalkingTime.TotalMinutes:F1} minutes.");
-        Log.Information($"Total sitting time: {totalSittingTime.TotalMinutes:F1} minutes.");
+        Log.Information($"Total sitting time: {totalSittingTime.TotalMinutes:F1} minutes. {Environment.NewLine}");
     }
 }
