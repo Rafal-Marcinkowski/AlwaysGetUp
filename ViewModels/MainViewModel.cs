@@ -44,7 +44,7 @@ public class MainViewModel : BaseViewModel
         Black,
         White
     }
-
+    private bool IsWalking = false;
     private CancellationTokenSource cancellation = new();
 
     private Stopwatch stopwatch = new();
@@ -84,6 +84,7 @@ public class MainViewModel : BaseViewModel
     {
         try
         {
+            IsWalking = false;
             token.ThrowIfCancellationRequested();
             stopwatch.Restart();
             Background = Color.Black;
@@ -109,6 +110,7 @@ public class MainViewModel : BaseViewModel
 
     private async Task BreakPeriod(CancellationToken token)
     {
+        IsWalking = true;
         token.ThrowIfCancellationRequested();
         Background = Color.White;
         stopwatch.Restart();
@@ -126,6 +128,15 @@ public class MainViewModel : BaseViewModel
 
     public void LogAccumulatedTime()
     {
+        if (stopwatch.IsRunning) { stopwatch.Stop(); }
+        if (IsWalking)
+        {
+            totalWalkingTime += TimeSpan.FromMinutes(Math.Round(stopwatch.Elapsed.TotalMinutes, 1));
+        }
+        else
+        {
+            totalSittingTime += TimeSpan.FromMinutes(Math.Round(stopwatch.Elapsed.TotalMinutes, 1));
+        }
         Log.Information($"Total walking time: {totalWalkingTime.TotalMinutes:F1} minutes.");
         Log.Information($"Total sitting time: {totalSittingTime.TotalMinutes:F1} minutes.");
     }

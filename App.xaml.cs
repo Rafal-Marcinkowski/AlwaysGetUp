@@ -32,8 +32,8 @@ public partial class App : Application
 
     protected override void OnExit(ExitEventArgs e)
     {
-        MainViewModel.Instance.LogAccumulatedTime();
         Log.Information($"Application exited.{Environment.NewLine}");
+        MainViewModel.Instance.LogAccumulatedTime();
         Log.CloseAndFlush();
         base.OnExit(e);
     }
