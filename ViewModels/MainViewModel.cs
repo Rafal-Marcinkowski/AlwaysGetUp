@@ -1,11 +1,12 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using Serilog;
 using System.Diagnostics;
 using System.Windows.Input;
 
 namespace AlwaysGetUp.ViewModels;
 
-public class MainViewModel : BaseViewModel
+public class MainViewModel : ObservableObject
 {
 
     private static MainViewModel _instance;
@@ -33,7 +34,7 @@ public class MainViewModel : BaseViewModel
         set
         {
             _background = value;
-            OnPropertyChanged(nameof(Background));
+            RaisePropertyChanged();
         }
     }
     public enum Color
@@ -84,15 +85,14 @@ public class MainViewModel : BaseViewModel
     {
         try
         {
-            IsWalking = false;
-            token.ThrowIfCancellationRequested();
+            IsWalking = false;           
             stopwatch.Restart();
             Background = Color.Black;
             IsWorkPeriodTaskActive = true;
             while (!token.IsCancellationRequested)
             {
                 Time = $"{Math.Round(stopwatch.Elapsed.TotalMinutes, 1)} minutes";
-                OnPropertyChanged(nameof(Time));
+                RaisePropertyChanged(nameof(Time));
                 if (stopwatch.Elapsed.TotalMinutes > 60 && Background != Color.Red)
                 {
                     Background = Color.Red;
@@ -110,14 +110,13 @@ public class MainViewModel : BaseViewModel
 
     private async Task BreakPeriod(CancellationToken token)
     {
-        IsWalking = true;
-        token.ThrowIfCancellationRequested();
+        IsWalking = true;    
         Background = Color.White;
         stopwatch.Restart();
         while (!token.IsCancellationRequested)
         {
             Time = $"{Math.Round(stopwatch.Elapsed.TotalMinutes, 1)} minutes";
-            OnPropertyChanged(nameof(Time));
+            RaisePropertyChanged(nameof(Time));
             if (stopwatch.Elapsed.TotalMinutes > 5 && Background != Color.Green)
             {
                 Background = Color.Green;
