@@ -9,31 +9,31 @@ namespace AlwaysGetUp.ViewModels;
 public class MainViewModel : ObservableObject
 {
 
-    private static MainViewModel _instance;
+    private static MainViewModel instance;
     public static MainViewModel Instance
     {
         get
         {
-            if (_instance == null)
+            if (instance == null)
             {
-                _instance = new MainViewModel();
+                instance = new MainViewModel();
             }
-            return _instance;
+            return instance;
         }
     }
 
     public event EventHandler? OneHourOfSittingEvent;
 
-    public bool IsWorkPeriodTaskActive = false;
+    public bool isWorkPeriodTaskActive = false;
 
     public string? Time { get; set; }
-    private Color _background = Color.Gray;
+    private Color background = Color.Gray;
     public Color Background
     {
-        get => _background;
+        get => background;
         set
         {
-            _background = value;
+            background = value;
             RaisePropertyChanged();
         }
     }
@@ -45,7 +45,7 @@ public class MainViewModel : ObservableObject
         Black,
         White
     }
-    private bool IsWalking = false;
+    private bool isWalking = false;
     private CancellationTokenSource cancellation = new();
 
     private Stopwatch stopwatch = new();
@@ -58,7 +58,10 @@ public class MainViewModel : ObservableObject
         {
             cancellation.Cancel();
             cancellation = new CancellationTokenSource();
-            if (stopwatch.IsRunning) { stopwatch.Stop(); }
+            if (stopwatch.IsRunning)
+            {
+                stopwatch.Stop();
+            }
             if (Background == Color.Gray || Background == Color.White || Background == Color.Green)
             {
                 if (stopwatch.Elapsed.TotalMinutes > 0)
@@ -85,18 +88,18 @@ public class MainViewModel : ObservableObject
     {
         try
         {
-            IsWalking = false;           
+            isWalking = false;
             stopwatch.Restart();
             Background = Color.Black;
-            IsWorkPeriodTaskActive = true;
+            isWorkPeriodTaskActive = true;
             while (!token.IsCancellationRequested)
             {
                 Time = $"{Math.Round(stopwatch.Elapsed.TotalMinutes, 1)} minutes";
                 RaisePropertyChanged(nameof(Time));
-                if (stopwatch.Elapsed.TotalMinutes > 60 && Background != Color.Red)
+                if (stopwatch.Elapsed.TotalMinutes >= 60 && Background != Color.Red)
                 {
                     Background = Color.Red;
-                    IsWorkPeriodTaskActive = false;
+                    isWorkPeriodTaskActive = false;
                     OneHourOfSittingEvent?.Invoke(this, EventArgs.Empty);
                 }
                 await Task.Delay(1000);
@@ -104,20 +107,20 @@ public class MainViewModel : ObservableObject
         }
         finally
         {
-            IsWorkPeriodTaskActive = false;
+            isWorkPeriodTaskActive = false;
         }
     }
 
     private async Task BreakPeriod(CancellationToken token)
     {
-        IsWalking = true;    
+        isWalking = true;
         Background = Color.White;
         stopwatch.Restart();
         while (!token.IsCancellationRequested)
         {
             Time = $"{Math.Round(stopwatch.Elapsed.TotalMinutes, 1)} minutes";
             RaisePropertyChanged(nameof(Time));
-            if (stopwatch.Elapsed.TotalMinutes > 5 && Background != Color.Green)
+            if (stopwatch.Elapsed.TotalMinutes >= 5 && Background != Color.Green)
             {
                 Background = Color.Green;
             }
@@ -127,8 +130,11 @@ public class MainViewModel : ObservableObject
 
     public void LogAccumulatedTime()
     {
-        if (stopwatch.IsRunning) { stopwatch.Stop(); }
-        if (IsWalking)
+        if (stopwatch.IsRunning)
+        {
+            stopwatch.Stop();
+        }
+        if (isWalking)
         {
             totalWalkingTime += TimeSpan.FromMinutes(Math.Round(stopwatch.Elapsed.TotalMinutes, 1));
         }

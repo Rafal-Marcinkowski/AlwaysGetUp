@@ -6,7 +6,7 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:AlwaysGetUp"      
         mc:Ignorable="d"
-               Height="150" Width="200">
+               Height="160" Width="225">
     <UserControl>
         <Grid>
             <Grid.RowDefinitions>

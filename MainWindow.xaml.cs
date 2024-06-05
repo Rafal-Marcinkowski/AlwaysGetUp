@@ -3,12 +3,9 @@ using System.Windows;
 
 namespace AlwaysGetUp;
 
-/// <summary>
-/// Interaction logic for MainWindow.xaml
-/// </summary>
 public partial class MainWindow : Window
 {
-    private MainViewModel viewModel = MainViewModel.Instance;
+    private readonly MainViewModel viewModel = MainViewModel.Instance;
     public MainWindow()
     {
         DataContext = viewModel;
@@ -20,7 +17,7 @@ public partial class MainWindow : Window
 
     private void HandleWindowLostFocus(object sender, EventArgs e)
     {
-        if (viewModel.IsWorkPeriodTaskActive)
+        if (viewModel.isWorkPeriodTaskActive)
         {
             if (WindowState == WindowState.Normal)
             {
